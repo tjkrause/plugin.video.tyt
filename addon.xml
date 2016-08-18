@@ -13,5 +13,6 @@ provider-name="Brian P. Soucy">
   <summary lang="en">The Young Turks Kodi Plugin for members.</summary>
   <description lang="en">Make Sure to set your username and password in addon settings.  All videos that are accessible from the website are playable.  If there is an error, the website hasn't migrated the video from GBox, and won't play on the website either.  Change the view setting in left tab to media info to get video summaries.</description>
   <disclaimer lang="en">The Young Turks Kodi Plugin for members.</disclaimer>
+  <source>https://github.com/lottaboost/plugin.video.tyt</source>
 </extension>
 </addon>
