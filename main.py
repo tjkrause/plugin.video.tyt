@@ -74,8 +74,8 @@ def list_categories():
         # Create a list item with a text label and a thumbnail image.
         list_item = xbmcgui.ListItem(label=category)
         list_item.setArt({'thumb': (MEDIA_URL + thumbs[category]),
-                          'icon': '',
-                          'fanart': ''})   
+                          'icon': (MEDIA_URL + thumbs[category]),
+                          'fanart': settings.getAddonInfo('fanart')})
         # http://mirrors.xbmc.org/docs/python-docs/15.x-isengard/xbmcgui.html#ListItem-setInfo
         list_item.setInfo('video', {'title': category, 'genre': category})
         # Create a URL for the plugin recursive callback.
