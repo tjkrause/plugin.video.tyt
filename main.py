@@ -18,12 +18,9 @@ settings = xbmcaddon.Addon(id=PLUGIN_ID)
 user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
 cookie = {}
-<<<<<<< HEAD
+
 ap_url            = "/category/membership/aggressive-progressives-membership/"
 ap_thumb          = "ap.png"
-=======
-
->>>>>>> 0207cb290b47ad7f29ae469327906d4c89213e4b
 hour1_url         = "/category/membership/main-show-hour-1/"
 hour1_thumb       = "hour1.png"
 hour2_url         = "/category/membership/main-show-hour-2/"
