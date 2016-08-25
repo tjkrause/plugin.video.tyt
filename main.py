@@ -58,10 +58,7 @@ tytlive_thumb     = "tytlive.jpg"
 
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb},
-<<<<<<< HEAD
                "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb},
-=======
->>>>>>> 0207cb290b47ad7f29ae469327906d4c89213e4b
                "Post Game":         {"url":pg_url, "thumb":pg_thumb},
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb},
