@@ -14,6 +14,11 @@ def get_links(html_page):
     
     videos.append({'name': title, 'description' : des, 'thumb': 'thethumb', 'aired':date, 'video': link, 'genre': 'News', 'plot': des, 'mediatype': 'tvshow'})
   return videos
+
+def get_live(html_page):
+  match = re.compile('TYT BETA STREAM.+?embed/(.+?)" frame',re.DOTALL).findall(html_page)
+  for link in match:
+    return link
         
 def page_info(html_page):
   match = re.compile('<div class="x-pagination.+?href="(.+?)" class=',re.DOTALL).findall(html_page)

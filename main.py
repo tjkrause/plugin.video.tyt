@@ -53,8 +53,10 @@ sam_url           = "plugin://plugin.video.youtube/user/samseder/"
 sam_thumb         = "sam.jpg"
 point_url         = "plugin://plugin.video.youtube/user/townsquare/"
 point_thumb       = "point.jpg"
-tytlive_url       = "plugin://plugin.video.youtube/channel/UC8Ap0a-VRZALdStTdipHGuA/"
+tytlive_url       = "/live/"
 tytlive_thumb     = "tytlive.jpg"
+tyt_get_live      = "/live/"
+tyt_get_live_thumb = "tytlive.jpg"
 
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb},
@@ -110,7 +112,7 @@ def get_cookie():
 def list_categories(menu):
   listing = []
   MEDIA_URL = 'special://home/addons/{0}/resources/images/'.format(PLUGIN_ID)
-
+  link = None
   for category in menu:#categories:
     list_item = xbmcgui.ListItem(label=category)
     list_item.setArt({'thumb': (MEDIA_URL + menu[category]['thumb']),
@@ -119,12 +121,22 @@ def list_categories(menu):
     list_item.setInfo('video', {'title': category, 'genre': 'News'}) #category})
     if 'menu' not in menu[category].keys(): 
       if menu[category]['url'][0] is '/':
-        url = '{0}?action=listing&category={1}'.format(_url, category) #If videos are on the main sites
+        if menu[category]['url'] is tytlive_url:
+          scrape = sendResponse(cookie, tytlive_url)
+          link = type1.get_live(scrape)
+          url = 'plugin://plugin.video.youtube/play/?video_id=%s' % (link)
+        else:
+          url = '{0}?action=listing&category={1}'.format(_url, category) #If videos are on the main sites
       else:
         url = main_cat[category]['url'] # If videos are on remote site
     else:
         url = '{0}?action=menu&menu={1}'.format(_url, menu[category]['menu'])
-    is_folder = True
+    if link is not None:
+      is_folder = False
+      link = None
+      list_item.setProperty('IsPlayable', 'true')
+    else: 
+      is_folder = True
     listing.append((url, list_item, is_folder))
   xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
   xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
