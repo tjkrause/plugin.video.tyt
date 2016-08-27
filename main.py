@@ -201,7 +201,6 @@ def router(paramstring):
     elif params['action'] == 'menu':
       if params['menu'] == 'members':
         if login():
-          get_cookie()
           list_categories(menus[params['menu']])
         else:
           popup(__language__(30003))#"Members Only is for paid members of TYTNetwork.com.  Please check username/password in plugin settings")
