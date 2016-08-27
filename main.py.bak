@@ -58,27 +58,27 @@ tytlive_thumb     = "tytlive.jpg"
 tyt_get_live      = "/live/"
 tyt_get_live_thumb = "tytlive.jpg"
 
-members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
-               "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb, "type":"members"},
-               "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb, "type":"members"},
-               "Post Game":         {"url":pg_url, "thumb":pg_thumb, "type":"members"},
-               "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
-               "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},
-               "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
+members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb},
+               "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb},
+               "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb},
+               "Post Game":         {"url":pg_url, "thumb":pg_thumb},
+               "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb},
+               "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb},
+               "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb}}
               
 
-main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "type":"main_members"},
-               "TYT Sports":        {"url":tytsports_url, "thumb":tytsports_thumb, "type":"youtube_channel"},
-               "TYT Politics":      {"url":tytpolitics_url, "thumb":tytpolitics_thumb, "type":"youtube_channel"},
-               "What The Flick?!":  {"url":wtf_url, "thumb":wtf_thumb, "type":"youtube_channel"},
-               "Pop Trigger":       {"url":pop_url, "thumb":pop_thumb, "type":"youtube_channel"},
-               "TYT Interviews":    {"url":tytint_url, "thumb":tytint_thumb, "type":"youtube_channel"},
-               "Nerd Alert":        {"url":nerd_url, "thumb":nerd_thumb, "type":"youtube_channel"},
-               "Secular Talk":      {"url":sec_url, "thumb":sec_thumb, "type":"youtube_channel"},
-               "The Point with Ana Kasparian": {"url":point_url, "thumb":point_thumb, "type":"youtube_channel"},
-               "The Majority Report with Sam Seder": {"url":sam_url, "thumb":sam_thumb, "type":"youtube_channel"},
-               "TYT Live Stream":   {"url":tytlive_url, "thumb":tytlive_thumb, "type":"youtube_video"},
-               "ThinkTank":         {"url":thinktank_url, "thumb":thinktank_thumb, "type":"youtube_channel"}}
+main_cat = {   "Members Only":      {"ismenu":True, "menu":"members", "thumb":hour1_thumb},
+               "TYT Sports":        {"url":tytsports_url, "thumb":tytsports_thumb},
+               "TYT Politics":      {"url":tytpolitics_url, "thumb":tytpolitics_thumb},
+               "What The Flick?!":  {"url":wtf_url, "thumb":wtf_thumb},
+               "Pop Trigger":       {"url":pop_url, "thumb":pop_thumb},
+               "TYT Interviews":    {"url":tytint_url, "thumb":tytint_thumb},
+               "Nerd Alert":        {"url":nerd_url, "thumb":nerd_thumb},
+               "Secular Talk":      {"url":sec_url, "thumb":sec_thumb},
+               "The Point with Ana Kasparian": {"url":point_url, "thumb":point_thumb},
+               "The Majority Report with Sam Seder": {"url":sam_url, "thumb":sam_thumb},
+               "TYT Live Stream":   {"url":tytlive_url, "thumb":tytlive_thumb},
+               "ThinkTank":         {"url":thinktank_url, "thumb":thinktank_thumb}}
 menus = {"main":main_cat,"members":members_cat}
 
 def sendResponse(cookies, pagename): 
@@ -112,32 +112,31 @@ def get_cookie():
 def list_categories(menu):
   listing = []
   MEDIA_URL = 'special://home/addons/{0}/resources/images/'.format(PLUGIN_ID)
+  link = None
   for category in menu:#categories:
     list_item = xbmcgui.ListItem(label=category)
     list_item.setArt({'thumb': (MEDIA_URL + menu[category]['thumb']),
                       'icon': (MEDIA_URL + menu[category]['thumb']),
                       'fanart': settings.getAddonInfo('fanart')})
-    list_item.setInfo('video', {'title': category, 'genre': 'News'}) 
-
-    if   menu[category]['type'] is 'main_members':                            #if selection is for members area
-      url = '{0}?action=menu&menu={1}'.format(_url, menu[category]['menu'])
-      is_folder = True
-
-    elif menu[category]['type'] is 'youtube_video':                           #if selection is tytlive
-      scrape = sendResponse(cookie, tytlive_url)
-      link = type1.get_live(scrape)
-      url = 'plugin://plugin.video.youtube/play/?video_id=%s' % (link)
+    list_item.setInfo('video', {'title': category, 'genre': 'News'}) #category})
+    if 'menu' not in menu[category].keys(): 
+      if menu[category]['url'][0] is '/':
+        if menu[category]['url'] is tytlive_url:
+          scrape = sendResponse(cookie, tytlive_url)
+          link = type1.get_live(scrape)
+          url = 'plugin://plugin.video.youtube/play/?video_id=%s' % (link)
+        else:
+          url = '{0}?action=listing&category={1}'.format(_url, category) #If videos are on the main sites
+      else:
+        url = main_cat[category]['url'] # If videos are on remote site
+    else:
+        url = '{0}?action=menu&menu={1}'.format(_url, menu[category]['menu'])
+    if link is not None:
+      is_folder = False
+      link = None
       list_item.setProperty('IsPlayable', 'true')
-      is_folder = False      
-
-    elif menu[category]['type'] is 'members':                                 #if selection is in members area
-      url = '{0}?action=listing&category={1}'.format(_url, category)
+    else: 
       is_folder = True
-
-    elif menu[category]['type'] is 'youtube_channel':                         #If selection is a youtube channel
-      url = main_cat[category]['url'] 
-      is_folder = True
-
     listing.append((url, list_item, is_folder))
   xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
   xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
@@ -148,10 +147,10 @@ def popup(text):
     
 def list_videos(category, url=None):
   listing = []
-  if url is None:
-      page = sendResponse(cookie, members_cat[category]['url'])
-  else:
-      page = sendResponse(cookie, url) 
+  try:
+    page = sendResponse(cookie, members_cat[category]['url'])
+  except:
+    page = sendResponse(cookie, url)
   videos = type1.get_links(page)
   MEDIA_URL = 'special://home/addons/{0}/resources/images/'.format(PLUGIN_ID)
   thumb = (MEDIA_URL + members_cat[category]['thumb'])        
@@ -197,10 +196,9 @@ def router(paramstring):
     if params['action'] == 'listing':      
       if 'url' in params.keys():
         list_videos(params['category'], params['url'])
-        popup(params['url'])
       else:
         list_videos(params['category'])
-    elif params['action'] == 'menu':
+    if params['action'] == 'menu':
       if params['menu'] == 'members':
         if login():
           list_categories(menus[params['menu']])
@@ -216,6 +214,7 @@ def router(paramstring):
       else:
         popup(__language__(30004)) # "Video doesn't exist on website."
   else:
+    #login()
     list_categories(main_cat)
 
 if __name__ == '__main__':
