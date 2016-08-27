@@ -67,7 +67,7 @@ members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type
                "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
               
 
-main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "type":"main_members"},
+main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "type":"members_menu"},
                "TYT Sports":        {"url":tytsports_url, "thumb":tytsports_thumb, "type":"youtube_channel"},
                "TYT Politics":      {"url":tytpolitics_url, "thumb":tytpolitics_thumb, "type":"youtube_channel"},
                "What The Flick?!":  {"url":wtf_url, "thumb":wtf_thumb, "type":"youtube_channel"},
@@ -119,7 +119,7 @@ def list_categories(menu):
                       'fanart': settings.getAddonInfo('fanart')})
     list_item.setInfo('video', {'title': category, 'genre': 'News'}) 
 
-    if   menu[category]['type'] is 'main_members':                            #if selection is for members area
+    if   menu[category]['type'] is 'members_menu':                            #if selection is for members area
       url = '{0}?action=menu&menu={1}'.format(_url, menu[category]['menu'])
       is_folder = True
 
@@ -190,19 +190,18 @@ def play_video(path):
 def router(paramstring):
   # Parse a URL-encoded paramstring to the dictionary of
   # {<parameter>: <value>} elements  
-  #cookie = params['login']
   params = dict(parse_qsl(paramstring))
   if params:
     get_cookie()
     if params['action'] == 'listing':      
       if 'url' in params.keys():
         list_videos(params['category'], params['url'])
-        popup(params['url'])
       else:
         list_videos(params['category'])
     elif params['action'] == 'menu':
       if params['menu'] == 'members':
         if login():
+          get_cookie()
           list_categories(menus[params['menu']])
         else:
           popup(__language__(30003))#"Members Only is for paid members of TYTNetwork.com.  Please check username/password in plugin settings")
