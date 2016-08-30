@@ -1,4 +1,8 @@
-import re
+import re, xbmcgui
+
+def popup(text):
+  xbmcgui.Dialog().ok('plugin.video.tyt', text)
+
 def get_video(html_page):
   try:
     match = re.compile("<div id='premium-video'.+?src='(.+?)' type", re.DOTALL).findall(html_page)
@@ -16,7 +20,8 @@ def get_links(html_page):
   return videos
 
 def get_live(html_page):
-  match = re.compile('TYT BETA STREAM.+?embed/(.+?)" frame',re.DOTALL).findall(html_page)
+#  match = re.compile('TYT BETA STREAM.+?embed/(.+?)" frame',re.DOTALL).findall(html_page)
+  match = re.compile('class="x-video embed.+?embed/(.+?)" frameborder=',re.DOTALL).findall(html_page)
   for link in match:
     return link
         
