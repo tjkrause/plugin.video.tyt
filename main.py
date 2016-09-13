@@ -195,7 +195,8 @@ def router(paramstring):
     if params['action'] == 'listing':
       if 'url' in params.keys():
         list_videos(params['category'], params['url'])
-      else:
+      else: #list videos in member section
+        get_cookie()
         list_videos(params['category'])
     elif params['action'] == 'menu':
       if params['menu'] == 'members':
