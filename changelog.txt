@@ -6,3 +6,5 @@
 [B]2.0.3[/B]
 - Fixed bug in im members area video description
 - Added All Star Tuesdays
+[B]2.0.4[/B]
+- Updated URL for All Star Tuesdays and Old School

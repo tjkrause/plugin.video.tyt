@@ -15,7 +15,6 @@ def get_video(html_page):
 def get_links(html_page):
   videos = []
   info = re.compile('<header class="entry-header.+?href="(.+?)".+?title="Permalink to: "(.+?)".+?datetime="(.+?)T.+?<p>(.+?)<',re.DOTALL).findall(html_page)
-  
   for link,title,date,des in info:
     
     videos.append({'name': title, 'description' : des, 'thumb': 'thethumb', 'aired':date, 'video': link, 'genre': 'News', 'plot': des, 'mediatype': 'tvshow'})
