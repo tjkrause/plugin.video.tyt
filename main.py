@@ -17,6 +17,7 @@ addon_folder = os.path.join(xbmc.translatePath( "special://profile/addon_data/" 
 settings = xbmcaddon.Addon(id=PLUGIN_ID)
 user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
+
 cookie = {}
 
 ap_url            = "/category/membership/aggressive-progressives-membership/"
@@ -82,6 +83,26 @@ main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "typ
                "TYT Live Stream":   {"url":tytlive_url, "thumb":tytlive_thumb, "type":"youtube_video"},
                "ThinkTank":         {"url":thinktank_url, "thumb":thinktank_thumb, "type":"youtube_channel"}}
 menus = {"main":main_cat,"members":members_cat}
+
+def show_changelog():
+
+  with open(settings.getAddonInfo('changelog')) as f:
+    text = f.read()
+  label = '%s - %s' % (xbmc.getLocalizedString(24054), settings.getAddonInfo('name'))
+  id = 10147
+  xbmc.executebuiltin('ActivateWindow(%d)' % id)
+  xbmc.sleep(100)
+  win = xbmcgui.Window(id)
+  retry = 50
+  while (retry > 0):
+    try:
+      xbmc.sleep(10)
+      win.getControl(1).setLabel(label)
+      win.getControl(5).setText(text)
+      retry = 0
+    except:
+      retry -= 1
+  return '1'
 
 def sendResponse(cookies, pagename): 
   conn = httplib.HTTPSConnection("tytnetwork.com")
@@ -192,6 +213,9 @@ def play_video(path):
 def router(paramstring):
   # Parse a URL-encoded paramstring to the dictionary of
   # {<parameter>: <value>} elements  
+  if settings.getSetting("version") != settings.getAddonInfo('version'):
+    show_changelog()
+    settings.setSetting(id="version", value=settings.getAddonInfo('version'))
   params = dict(parse_qsl(paramstring))
   if params:
     if params['action'] == 'listing':
