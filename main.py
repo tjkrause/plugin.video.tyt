@@ -56,8 +56,10 @@ point_url         = "plugin://plugin.video.youtube/user/townsquare/"
 point_thumb       = "point.jpg"
 tytlive_url       = "/live/"
 tytlive_thumb     = "tytlive.jpg"
-tyt_get_live      = "/live/"
-tyt_get_live_thumb = "tytlive.jpg"
+members_live_url  = "/memberslive/"
+members_live_thumb = "tytlive.jpg"
+special_events_url = "/category/membership/specialevents/"
+special_events_thumb = "tytlive.jpg"
 allstar_url       = "/category/membership/all-star-tuesdays-membership/"
 allstar_thumb     = "allstar.jpg"
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
@@ -67,6 +69,8 @@ members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},
                "All Star Tuesdays": {"url":allstar_url, "thumb":allstar_thumb, "type":"members"},
+               "Special Events":    {"url":special_events_url, "thumb":special_events_thumb, "type":"members"},
+               "Members LIVE show": {"url":members_live_url, "thumb":members_live_thumb, "type":"members_live"},
                "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
               
 
@@ -157,6 +161,13 @@ def list_categories(menu):
       url = '{0}?action=listing&category={1}'.format(_url, category)
       is_folder = True
 
+    elif menu[category]['type'] is 'members_live':
+      scrape = sendResponse(cookie, members_live_url)
+      link = type1.get_members_live(scrape)
+      url = 'plugin://plugin.video.youtube/play/?video_id=%s' % (link)
+      list_item.setProperty('IsPlayable', 'true')
+      is_folder = False
+    
     elif menu[category]['type'] is 'youtube_channel':                         #If selection is a youtube channel
       url = main_cat[category]['url'] 
       is_folder = True

@@ -12,7 +12,7 @@ provider-name="Brian P. Soucy">
 </extension>
 <extension point="xbmc.addon.metadata">
   <summary lang="en">TYT Network - The Young Turks</summary>
-  <description lang="en">Make Sure to set your username and password in addon settings.  Change the view setting in left tab to media info to get video summaries.  Make sure to configure YouTube plugin, and make sure it has API Key/Enable Personal API Keys enabled in settings.  If certain areas are unavailable, TYTNetwork.com may have done an update to their site, and you can expect an update for this plugin soon.</description>
+  <description lang="en">Make Sure to set your username and password in addon settings.  Change the view setting in left tab to media info to get video summaries.  Make sure to configure YouTube plugin, and make sure it has API Key/Enable Personal API Keys enabled in settings.  If something doesn't work, expect an update soon, as I use this addon as well.</description>
   <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license> 
   <website>https://www.tytnetwork.com</website>
   <disclaimer lang="en">This plugin was written by a 3rd party which has no endorsement or affiliation with tytnetwork.com</disclaimer>
